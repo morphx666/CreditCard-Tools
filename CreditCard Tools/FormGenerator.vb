@@ -8,7 +8,7 @@ Public Class FormGenerator
         For Each mii In [Enum].GetNames(GetType(CC.MajorIndustryIdentifiers))
             ComboBoxMII.Items.Add(mii)
         Next
-        ComboBoxMII.SelectedIndex = 4
+        ComboBoxMII.SelectedIndex = 5
 
         'For Each iin In [Enum].GetNames(GetType(CC.IssuerIdentificationNumbers))
         '    ComboBoxIIN.Items.Add(iin)

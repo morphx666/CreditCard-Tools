@@ -146,6 +146,7 @@ Partial Class FormGenerator
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "FormGenerator"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Generator"
         Me.ResumeLayout(False)
