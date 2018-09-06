@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CreditCard Tools", "CreditCard Tools\CreditCard Tools.vbproj", "{B2D428B9-E66B-4648-AE46-AE0A6C3974F8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2D428B9-E66B-4648-AE46-AE0A6C3974F8}.Debug|x86.ActiveCfg = Debug|x86
+		{B2D428B9-E66B-4648-AE46-AE0A6C3974F8}.Debug|x86.Build.0 = Debug|x86
+		{B2D428B9-E66B-4648-AE46-AE0A6C3974F8}.Release|x86.ActiveCfg = Release|x86
+		{B2D428B9-E66B-4648-AE46-AE0A6C3974F8}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+EndGlobal

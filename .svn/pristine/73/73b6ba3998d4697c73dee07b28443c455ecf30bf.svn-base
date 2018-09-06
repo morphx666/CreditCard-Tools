@@ -1,0 +1,92 @@
+﻿Public Class FormMain
+    Dim mCC As New CC()
+
+    Private Sub TextBoxCCNum_TextChanged(sender As System.Object, e As System.EventArgs) Handles TextBoxCCNum.TextChanged
+        mCC.Number = TextBoxCCNum.Text
+
+        LabelANResult.Text = mCC.Account
+        LabelIINResult.Text = mCC.IssuerIdentificationNumber.ToString()
+        LabelMIIResult.Text = mCC.MajorIndustryIdentifier.ToString()
+        LabelValidityResult.Text = mCC.IsValid.ToString()
+    End Sub
+
+    'Private Sub AnalyzeCCNumber(value As String)
+    '    If value.Length <> 16 Then
+    '        LabelANResult.Text = "n/a"
+    '        LabelIINResult.Text = "n/a"
+    '        LabelMIIResult.Text = "n/a"
+    '        LabelValidityResult.Text = "n/a"
+
+    '        Exit Sub
+    '    End If
+
+    '    Select Case Integer.Parse(value.Substring(0, 1))
+    '        Case 1, 2 : LabelMIIResult.Text = "Airlines"
+    '        Case 3 : LabelMIIResult.Text = "Travel & Entertainment"
+    '        Case 4, 5 : LabelMIIResult.Text = "Banking & Financial"
+    '        Case 6 : LabelMIIResult.Text = "Merchandizing & Banking"
+    '        Case 7 : LabelMIIResult.Text = "Petroleum"
+    '        Case 8 : LabelMIIResult.Text = "Telecommunications"
+    '        Case 9 : LabelMIIResult.Text = "National Assignment"
+    '        Case Else : LabelMIIResult.Text = "Invalid"
+    '    End Select
+
+    '    Dim iin As String = Integer.Parse(value.Substring(0, 6))
+    '    Select Case Integer.Parse(iin.Substring(0, 1))
+    '        Case 4 : LabelIINResult.Text = "Visa"
+    '        Case 5
+    '            If Integer.Parse(iin.Substring(0, 2)) >= 51 AndAlso Integer.Parse(iin.Substring(0, 2)) <= 55 Then
+    '                LabelIINResult.Text = "Mastercard"
+    '            Else
+    '                LabelIINResult.Text = "Invalid"
+    '            End If
+    '        Case 6
+    '            If iin.Substring(0, 4) = "6011" OrElse iin.Substring(0, 3) = "644" OrElse iin.Substring(0, 2) = "65" Then
+    '                LabelIINResult.Text = "Discover"
+    '            Else
+    '                LabelIINResult.Text = "Invalid"
+    '            End If
+    '        Case 3
+    '            If iin.Substring(0, 2) = "34" OrElse iin.Substring(0, 2) = "37" Then
+    '                LabelIINResult.Text = "Amex"
+    '            Else
+    '                LabelIINResult.Text = "Invalid"
+    '            End If
+    '        Case Else : LabelIINResult.Text = "Invalid"
+    '    End Select
+
+    '    LabelANResult.Text = value.Substring(6, 9)
+
+    '    Dim acc As Integer = 0
+    '    Dim n As Integer
+    '    For i As Integer = 0 To value.Length - 1
+    '        n = Integer.Parse(value.Substring(i, 1))
+    '        If i Mod 2 = 0 Then n *= 2
+    '        If n > 9 Then
+    '            Dim ip As Integer = Math.Floor(n / 10)
+    '            Dim fp As Integer = n - ip * 10
+    '            n = ip + fp
+    '        End If
+    '        acc = acc + n
+    '    Next
+
+    '    If acc Mod 10 = 0 Then
+    '        LabelValidityResult.Text = "Valid"
+    '    Else
+    '        LabelValidityResult.Text = "Invalid"
+    '    End If
+    'End Sub
+
+    Private Sub FormMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        TextBoxCCNum.Text = mCC.Number
+    End Sub
+
+    Private Sub ButtonGenerator_Click(sender As Object, e As EventArgs) Handles ButtonGenerator.Click
+        Using dlg As New FormGenerator()
+            dlg.ShowDialog(Me)
+            If dlg.ListViewCCs.SelectedItems.Count = 1 Then
+                TextBoxCCNum.Text = dlg.ListViewCCs.SelectedItems(0).Text.Replace(" ", "")
+            End If
+        End Using
+    End Sub
+End Class

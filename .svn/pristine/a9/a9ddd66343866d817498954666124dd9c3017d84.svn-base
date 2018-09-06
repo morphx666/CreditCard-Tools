@@ -1,0 +1,275 @@
+﻿Imports System.Reflection
+
+Public Class CC
+    Public Enum MajorIndustryIdentifiers
+        <Range()> Invalid
+        <Range("0")> ISO_TC68
+        <Range("1-2")> Airlines
+        <Range("3")> TravelAndEntertainment
+        <Range("4-5")> BankingAndFinancial
+        <Range("6")> MerchandizingAndBanking
+        <Range("7")> Petroleum
+        <Range("8")> Telecommunications
+        <Range("9")> NationalAssignment
+    End Enum
+
+    Public Enum IssuerIdentificationNumbers
+        <Range()> Invalid
+        <Range("34, 37")> AmericanExpress
+        <Range("5610, 560221-560225")> Bankcard
+        <Range("62")> ChinaUnionPay
+        <Range("300-305")> DinersClubCarteBlanche
+        <Range("2014, 2149")> DinersClub_enRoute
+        <Range("36")> DinersClubInternational
+        <Range("54, 55")> DinersClubUnitedStatesAndCanada
+        <Range("6011, 622126-622925, 644-649, 65")> DiscoverCard
+        <Range("637-639")> InstaPayment
+        <Range("3528-3589")> JCB
+        <Range("6304, 6706, 6771, 6709")> Laser
+        <Range("5018, 5020, 5038, 5893, 6304, 6759, 6761, 6762, 6763, 0604")> Maestro
+        <Range("51-55")> MasterCard
+        <Range("6334, 6767")> Solo
+        <Range("4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759")> Switch
+        <Range("4")> Visa
+        <Range("4026, 417500, 4405, 4508, 4844, 4913, 4917")> VisaElectron
+    End Enum
+
+    Private mNumber As String
+    Private mMII As MajorIndustryIdentifiers = MajorIndustryIdentifiers.Invalid
+    Private mIIN As IssuerIdentificationNumbers = IssuerIdentificationNumbers.Invalid
+    Private mAccount As String
+    Private mIsValid As Boolean
+
+    Public Sub New()
+    End Sub
+
+    Public Sub New(number As String)
+        Me.Number = number
+    End Sub
+
+    Public Property Number As String
+        Get
+            Return mNumber
+        End Get
+        Set(value As String)
+            mNumber = value
+            Decode()
+        End Set
+    End Property
+
+    Public ReadOnly Property Account As String
+        Get
+            Return mAccount
+        End Get
+    End Property
+
+    Public ReadOnly Property MajorIndustryIdentifier As MajorIndustryIdentifiers
+        Get
+            Return mMII
+        End Get
+    End Property
+
+    Public ReadOnly Property IssuerIdentificationNumber As IssuerIdentificationNumbers
+        Get
+            Return mIIN
+        End Get
+    End Property
+
+    Public ReadOnly Property IsValid As Boolean
+        Get
+            Return mIsValid
+        End Get
+    End Property
+
+    Private Sub Decode()
+        mMII = MajorIndustryIdentifiers.Invalid
+        mIIN = IssuerIdentificationNumbers.Invalid
+        mAccount = ""
+        mIsValid = False
+
+        If mNumber.Length <> 16 Then Exit Sub
+
+        Dim v As Integer
+
+        v = Integer.Parse(mNumber.Substring(0, 1))
+        Dim ev1 As MajorIndustryIdentifiers
+        For Each mmi In [Enum].GetNames(GetType(MajorIndustryIdentifiers))
+            If [Enum].TryParse(mmi, ev1) Then
+                For Each r In Range.GetRanges(ev1)
+                    If v >= r.Min AndAlso v <= r.Max Then
+                        mMII = ev1
+                        Exit For
+                    End If
+                Next
+            End If
+            If mMII <> MajorIndustryIdentifiers.Invalid Then Exit For
+        Next
+
+        Dim ev2 As IssuerIdentificationNumbers
+        For Each iin In [Enum].GetNames(GetType(IssuerIdentificationNumbers))
+            If [Enum].TryParse(iin, ev2) Then
+                For Each r In Range.GetRanges(ev2)
+                    Dim ml = Math.Max(r.Min.ToString().Length, r.Max.ToString().Length)
+                    v = Integer.Parse(mNumber.Substring(0, ml))
+
+                    If v >= r.Min AndAlso v <= r.Max Then
+                        mIIN = ev2
+                        Exit For
+                    End If
+                Next
+            End If
+            If mIIN <> IssuerIdentificationNumbers.Invalid Then Exit For
+        Next
+
+        mAccount = mNumber.Substring(6, 9)
+
+        mIsValid = (CalculateChecksum(mNumber) Mod 10 = 0) AndAlso
+                    mMII <> MajorIndustryIdentifiers.Invalid AndAlso
+                    mIIN <> IssuerIdentificationNumbers.Invalid
+    End Sub
+
+    Private Function CalculateChecksum(value As String) As Integer
+        Dim checkSum As Integer = 0
+        Dim n As Integer
+        For i As Integer = 0 To value.Length - 1
+            n = Integer.Parse(value.Substring(i, 1))
+            If i Mod 2 = 0 Then n *= 2
+            If n > 9 Then
+                Dim ip As Integer = Math.Floor(n / 10)
+                Dim fp As Integer = n - ip * 10
+                n = ip + fp
+            End If
+            checkSum = checkSum + n
+        Next
+
+        Return checkSum
+    End Function
+
+    Public Function Encode(mii As MajorIndustryIdentifiers, iin As IssuerIdentificationNumbers) As CC
+        Dim triesCount As Integer
+
+        If mii = MajorIndustryIdentifiers.Invalid OrElse iin = IssuerIdentificationNumbers.Invalid Then Return Nothing
+
+        Do
+            Dim miiValues As New List(Of Integer)
+            Dim iinValues As New List(Of Integer)
+            Dim ccNumber As String = ""
+            Dim rand As New Random()
+
+            Dim ev1 As MajorIndustryIdentifiers
+            For Each r In Range.GetRanges(mii)
+                For i As Integer = r.Min To r.Max
+                    miiValues.Add(i)
+                Next
+            Next
+
+            Dim ev2 As MajorIndustryIdentifiers
+            For Each r In Range.GetRanges(iin)
+                For i As Integer = r.Min To r.Max
+                    For Each miiValue In miiValues
+                        If i.ToString().StartsWith(miiValue.ToString()) Then
+                            iinValues.Add(i)
+                        End If
+                    Next
+                Next
+            Next
+
+            If iinValues.Count > 0 Then
+                ' First Digits
+                ccNumber = iinValues(rand.Next(iinValues.Count - 1))
+                Dim l = ccNumber.Length
+                ' Padding
+                If l < 6 Then ccNumber += rand.Next(10 ^ (6 - l) - 1).ToString().PadLeft((6 - l), "0")
+                ' Account Number
+                ccNumber += rand.Next(10 ^ 9 - 1).ToString().PadLeft(9, "0")
+
+                For i As Integer = 0 To 9
+                    If CalculateChecksum(ccNumber + i.ToString()) Mod 10 = 0 Then
+                        ccNumber += i.ToString()
+                        Exit For
+                    End If
+                Next
+
+                If ccNumber.Length = 16 Then
+                    Return New CC(ccNumber)
+                Else
+                    triesCount += 1
+                    If triesCount > 100 Then Return Nothing
+                End If
+            Else
+                Return Nothing
+            End If
+        Loop
+    End Function
+End Class
+
+<AttributeUsage(AttributeTargets.Field, Inherited:=True)>
+Public Class Range
+    Inherits Attribute
+
+    Public Class ValueRange
+        Private mMin As Integer
+        Private mMax As Integer
+
+        Public ReadOnly Property Min As Integer
+            Get
+                Return mMin
+            End Get
+        End Property
+
+        Public ReadOnly Property Max As Integer
+            Get
+                Return mMax
+            End Get
+        End Property
+
+        Public Sub New(min As Integer, max As Integer)
+            mMin = min
+            mMax = max
+        End Sub
+
+        Public Sub New(uniqueValue As Integer)
+            Me.New(uniqueValue, uniqueValue)
+        End Sub
+    End Class
+
+    Private mValueRanges As New List(Of ValueRange)
+
+    Public Sub New()
+    End Sub
+
+    Public Sub New(ranges As String)
+        For Each token In ranges.Split(",")
+            If token.Contains("-") Then
+                Dim values() = token.Split("-")
+                mValueRanges.Add(New ValueRange(Integer.Parse(values(0)), Integer.Parse(values(1))))
+            Else
+                mValueRanges.Add(New ValueRange(Integer.Parse(token)))
+            End If
+        Next
+    End Sub
+
+    Public ReadOnly Property Ranges As List(Of ValueRange)
+        Get
+            Return mValueRanges
+        End Get
+    End Property
+
+    Public ReadOnly Property HasRange As Boolean
+        Get
+            Return mValueRanges.Any()
+        End Get
+    End Property
+
+    Public Shared Function GetRanges(value As [Enum]) As List(Of ValueRange)
+        Dim attr As Range
+        Dim memberInfo As MemberInfo = value.GetType().GetMember(value.ToString()).FirstOrDefault()
+        If memberInfo IsNot Nothing Then attr = CType(memberInfo.GetCustomAttributes(GetType(Range), False).FirstOrDefault(), Range)
+
+        If attr Is Nothing Then
+            Return Nothing
+        Else
+            Return attr.Ranges
+        End If
+    End Function
+End Class

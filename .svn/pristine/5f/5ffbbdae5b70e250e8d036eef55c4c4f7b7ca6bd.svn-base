@@ -1,0 +1,54 @@
+﻿Public Class FormGenerator
+    Private Sub FormGenerator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        For Each mii In [Enum].GetNames(GetType(CC.MajorIndustryIdentifiers))
+            ComboBoxMII.Items.Add(mii)
+        Next
+        ComboBoxMII.SelectedIndex = 0
+
+        For Each iin In [Enum].GetNames(GetType(CC.IssuerIdentificationNumbers))
+            ComboBoxIIN.Items.Add(iin)
+        Next
+        ComboBoxIIN.SelectedIndex = 0
+
+        AddHandler ComboBoxMII.SelectedIndexChanged, Sub() Generate()
+        AddHandler ComboBoxIIN.SelectedIndexChanged, Sub() Generate()
+    End Sub
+
+    Private Sub Generate()
+        Dim mii As CC.MajorIndustryIdentifiers = [Enum].Parse(GetType(CC.MajorIndustryIdentifiers), ComboBoxMII.SelectedItem.ToString())
+        Dim iin As CC.IssuerIdentificationNumbers = [Enum].Parse(GetType(CC.IssuerIdentificationNumbers), ComboBoxIIN.SelectedItem.ToString())
+
+        ListViewCCs.Items.Clear()
+        LabelTotal.Text = "Total: 0"
+        If mii = CC.MajorIndustryIdentifiers.Invalid OrElse iin = CC.IssuerIdentificationNumbers.Invalid Then Exit Sub
+
+        Dim ns As New List(Of String)
+        Dim tries As Integer
+
+        Do
+            Dim cc = (New CC()).Encode(mii, iin)
+            If cc IsNot Nothing AndAlso Not ns.Contains(cc.Number) Then
+                ns.Add(cc.Number)
+                tries = 0
+            Else
+                tries += 1
+            End If
+        Loop Until ns.Count = 100 OrElse tries > 200
+
+        For Each ccn In ns.OrderBy(Function(n) n)
+            Dim s As String
+            For i As Integer = 0 To 4 - 1
+                s += ccn.Substring(i * 4, 4) + " "
+            Next
+            ListViewCCs.Items.Add(s.Trim())
+            s = ""
+        Next
+
+        ListViewCCs.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+        LabelTotal.Text = "Total: " + ns.Count.ToString()
+    End Sub
+
+    Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefresh.Click
+        Generate()
+    End Sub
+End Class
