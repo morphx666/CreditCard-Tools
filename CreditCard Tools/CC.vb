@@ -1,5 +1,4 @@
 ﻿Imports System.Reflection
-'Imports System.ComponentModel.DataAnnotations
 
 ' http://www.freeformatter.com/credit-card-number-generator-validator.html
 ' http://www.stevemorse.org/ssn/List_of_Bank_Identification_Numbers.html#Petroleum_and_other_future_industry_assignments_.287.2A.2A.2A.2A.2A.29
