@@ -32,10 +32,14 @@ Partial Class FormGenerator
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.LabelMMIDescription = New System.Windows.Forms.Label()
+        Me.ButtonClose = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'ListViewCCs
         '
+        Me.ListViewCCs.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListViewCCs.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeaderNumber})
         Me.ListViewCCs.Font = New System.Drawing.Font("Consolas", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ListViewCCs.FullRowSelect = True
@@ -43,7 +47,7 @@ Partial Class FormGenerator
         Me.ListViewCCs.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListViewCCs.Location = New System.Drawing.Point(14, 71)
         Me.ListViewCCs.Name = "ListViewCCs"
-        Me.ListViewCCs.Size = New System.Drawing.Size(459, 390)
+        Me.ListViewCCs.Size = New System.Drawing.Size(459, 443)
         Me.ListViewCCs.TabIndex = 0
         Me.ListViewCCs.UseCompatibleStateImageBehavior = False
         Me.ListViewCCs.View = System.Windows.Forms.View.Details
@@ -72,7 +76,8 @@ Partial Class FormGenerator
         '
         'ButtonRefresh
         '
-        Me.ButtonRefresh.Location = New System.Drawing.Point(398, 467)
+        Me.ButtonRefresh.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonRefresh.Location = New System.Drawing.Point(317, 520)
         Me.ButtonRefresh.Name = "ButtonRefresh"
         Me.ButtonRefresh.Size = New System.Drawing.Size(75, 23)
         Me.ButtonRefresh.TabIndex = 2
@@ -81,8 +86,9 @@ Partial Class FormGenerator
         '
         'LabelTotal
         '
+        Me.LabelTotal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelTotal.AutoSize = True
-        Me.LabelTotal.Location = New System.Drawing.Point(14, 464)
+        Me.LabelTotal.Location = New System.Drawing.Point(14, 517)
         Me.LabelTotal.Name = "LabelTotal"
         Me.LabelTotal.Size = New System.Drawing.Size(45, 15)
         Me.LabelTotal.TabIndex = 3
@@ -93,7 +99,7 @@ Partial Class FormGenerator
         Me.LabelCopy2Clip.AutoSize = True
         Me.LabelCopy2Clip.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelCopy2Clip.ForeColor = System.Drawing.SystemColors.Highlight
-        Me.LabelCopy2Clip.Location = New System.Drawing.Point(187, 471)
+        Me.LabelCopy2Clip.Location = New System.Drawing.Point(164, 53)
         Me.LabelCopy2Clip.Name = "LabelCopy2Clip"
         Me.LabelCopy2Clip.Padding = New System.Windows.Forms.Padding(6)
         Me.LabelCopy2Clip.Size = New System.Drawing.Size(142, 29)
@@ -127,24 +133,37 @@ Partial Class FormGenerator
         Me.LabelMMIDescription.Size = New System.Drawing.Size(0, 15)
         Me.LabelMMIDescription.TabIndex = 6
         '
+        'ButtonClose
+        '
+        Me.ButtonClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonClose.Location = New System.Drawing.Point(398, 520)
+        Me.ButtonClose.Name = "ButtonClose"
+        Me.ButtonClose.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonClose.TabIndex = 2
+        Me.ButtonClose.Text = "Close"
+        Me.ButtonClose.UseVisualStyleBackColor = True
+        '
         'FormGenerator
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(489, 502)
+        Me.ClientSize = New System.Drawing.Size(489, 555)
+        Me.ControlBox = False
         Me.Controls.Add(Me.LabelMMIDescription)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.LabelCopy2Clip)
         Me.Controls.Add(Me.LabelTotal)
+        Me.Controls.Add(Me.ButtonClose)
         Me.Controls.Add(Me.ButtonRefresh)
         Me.Controls.Add(Me.ComboBoxIIN)
         Me.Controls.Add(Me.ComboBoxMII)
         Me.Controls.Add(Me.ListViewCCs)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(505, 9999)
         Me.MinimizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(505, 594)
         Me.Name = "FormGenerator"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -163,4 +182,5 @@ Partial Class FormGenerator
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents LabelMMIDescription As Label
+    Friend WithEvents ButtonClose As Button
 End Class

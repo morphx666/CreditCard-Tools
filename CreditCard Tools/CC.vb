@@ -4,6 +4,8 @@
 ' http://www.stevemorse.org/ssn/List_of_Bank_Identification_Numbers.html#Petroleum_and_other_future_industry_assignments_.287.2A.2A.2A.2A.2A.29
 ' https://web.eecs.umich.edu/~bartlett/credit_card_number.html
 
+' FIXME: Only 16 digit long numbers are supported
+
 Public Class CC
     Public Enum MajorIndustryIdentifiers
         <Range()> <Description("Invalid")> Invalid
@@ -151,6 +153,7 @@ Public Class CC
                     mIIN <> IssuerIdentificationNumbers.Invalid
     End Sub
 
+    ' Luhn algorithm
     Private Function CalculateChecksum(value As String) As Integer
         Dim checkSum As Integer = 0
         Dim n As Integer

@@ -4,6 +4,8 @@ Public Class FormGenerator
     Private Sub FormGenerator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         AddHandler ComboBoxMII.SelectedIndexChanged, Sub() UpdateMII()
         AddHandler ComboBoxIIN.SelectedIndexChanged, Sub() Generate()
+        AddHandler ButtonRefresh.Click, Sub() Generate()
+        AddHandler ButtonClose.Click, Sub() Me.Close()
 
         For Each mii In [Enum].GetNames(GetType(CC.MajorIndustryIdentifiers))
             ComboBoxMII.Items.Add(mii)
@@ -81,10 +83,6 @@ Public Class FormGenerator
         LabelTotal.Text = "Total: " + ns.Count.ToString()
 
         ListViewCCs.Enabled = ns.Any()
-    End Sub
-
-    Private Sub ButtonRefresh_Click(sender As Object, e As EventArgs) Handles ButtonRefresh.Click
-        Generate()
     End Sub
 
     Private Sub ListViewCCs_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ListViewCCs.MouseDoubleClick
